@@ -279,7 +279,7 @@
         <div class="modal-title">操作提示</div>
         <span class="close-modal" data-modal="errorModal">&times;</span>
       </div>
-      <p id="errorMsg">操作失败，请重试</p>
+      <p id="errorMsg">操���失���，请重试</p>
       <button type="button" class="form-btn float-hover" style="margin-top: 20px;" onclick="document.getElementById('errorModal').classList.remove('active')">确定</button>
     </div>
   </div>
@@ -287,7 +287,7 @@
   <div class="modal" id="successModal">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title">操作提示</div>
+        <div class="modal-title">��作提示</div>
         <span class="close-modal" data-modal="successModal">&times;</span>
       </div>
       <p id="successMsg">操作成功</p>
@@ -623,5 +623,10 @@
       document.getElementById('sendCaptcha').addEventListener('click', sendCaptcha);
     });
   </script>
+  <!-- Vercel Speed Insights -->
+  <script>
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
