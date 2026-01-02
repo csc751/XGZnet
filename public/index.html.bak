@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XGZ网</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+    body { background: #eef2f7; min-height: 100vh; }
+    .header { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 16px; display: flex; justify-content: space-between; align-items: center; z-index: 2001; }
+    .user-info { display: flex; flex-direction: column; }
+    #displayName { font-size: 18px; font-weight: 600; }
+    #levelInfo { font-size: 14px; color: #666; display: none; }
+    .auth-buttons { display: flex; gap: 8px; }
+    .auth-btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.3s; }
+    .login-btn { background: #4CAF50; color: #fff; }
+    .login-btn:hover { background: #45a049; }
+    .register-btn { background: #2196F3; color: #fff; }
+    .register-btn:hover { background: #0b7dda; }
+    .logout-btn { background: #f44; color: #fff; display: none; }
+    .logout-btn:hover { background: #e33; }
+    .main { display: flex; gap: 16px; padding: 16px; min-height: calc(100vh - 80px); }
+    .sidebar { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px; min-width: 220px; min-height: 500px; padding: 16px; }
+    .sidebar h2 { font-size: 16px; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    .menu-list { list-style: none; }
+    .menu-item { padding: 12px; margin: 4px 0; border-radius: 6px; cursor: pointer; transition: background 0.3s; }
+    .menu-item.active, .menu-item:hover { background: #f5f5f5; }
+    .content { flex: 1; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px; padding: 24px; min-height: 500px; }
+    .content-section { display: none; animation: fadeIn 0.3s ease forwards; }
+    .content-section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .content-section h3 { font-size: 18px; margin: 16px 0; }
+    .content-section p { line-height: 1.6; margin-bottom: 12px; }
+    .content-section a { color: #007bff; text-decoration: none; transition: color 0.3s; }
+    .content-section a:hover { color: #0056b3; text-decoration: underline; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: #fff; border-radius: 8px; width: 90%; max-width: 500px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); position: relative; z-index: 2001; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+    .modal-title { font-size: 18px; font-weight: 600; }
+    .close-modal { font-size: 20px; cursor: pointer; color: #999; transition: color 0.3s; }
+    .close-modal:hover { color: #333; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 500; }
+    .form-group input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; transition: border 0.3s; }
+    .form-group input:focus { border-color: #2196F3; outline: none; }
+    /* 登录/注册按钮：宽尺寸（占满宽度） */
+    .form-btn { 
+      padding: 12px; 
+      background: #2196F3; 
+      color: #fff; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      transition: all 0.3s; 
+      width: 100%; 
+      margin-top: 8px; 
+    }
+    .form-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .form-btn:hover:not(:disabled) { background: #0b7dda; }
+    /* 发送验证码按钮专属样式（小尺寸） */
+    .captcha-btn {
+      padding: 8px 16px;
+      width: auto;
+      margin-top: 0;
+    }
+    .form-message { margin-top: 12px; text-align: center; color: #666; }
+    .captcha-row { display: flex; align-items: center; gap: 8px; }
+    #sendCaptcha { flex-shrink: 0; }
+    .risk-notice { margin: 16px 0; line-height: 1.8; }
+    .risk-notice li { margin-left: 20px; margin-bottom: 8px; }
+    .checkbox-group { display: flex; align-items: center; gap: 8px; margin: 20px 0; }
+    .user-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .user-table th, .user-table td { border: 1px solid #eee; padding: 12px; text-align: left; }
+    .user-table th { background: #f5f5f5; font-weight: 600; }
+    .visit-count-container { padding: 16px; background: #f9f9f9; border-radius: 8px; margin-bottom: 20px; }
+    .about-item { margin-bottom: 24px; padding: 16px; background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; transition: box-shadow 0.3s; }
+    .about-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .about-item h4 { margin-bottom: 8px; font-size: 16px; font-weight: 600; }
+    .about-item p { margin-bottom: 8px; line-height: 1.6; }
+    .about-item a { display: inline-block; color: #2196F3; text-decoration: none; padding: 4px 0; transition: color 0.3s, text-decoration 0.3s; }
+    .about-item a:hover { color: #0b7dda; text-decoration: underline; }
+    #about h3 { margin-bottom: 16px; }
+    .glass-module { margin-bottom: 24px; padding: 16px; background: rgba(255, 255, 255, 0.8); border: 1px solid #eee; border-radius: 8px; transition: box-shadow 0.3s; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+    .glass-btn { width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 6px; color: #333; font-size: 14px; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+    .glass-btn:hover { background: rgba(255, 255, 255, 0.5); border-color: rgba(0, 0, 0, 0.2); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    
+    /* 按钮悬浮浮动效果 */
+    .float-hover {
+      transition: all 0.3s ease;
+    }
+    .float-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 768px) { .main { flex-direction: column; } .sidebar, .content { min-width: auto; } }
+  </style>
+</head>
+<body>
+  <!-- 顶部栏 -->
+  <header class="header">
+    <div class="user-info">
+      <div id="displayName">未登录</div>
+      <p id="levelInfo">等级: Lv.1</p>
+    </div>
+    <div class="auth-buttons">
+      <button class="auth-btn login-btn float-hover" id="headerLoginBtn">登录</button>
+      <button class="auth-btn register-btn float-hover" id="headerRegisterBtn">注册</button>
+      <button class="auth-btn logout-btn float-hover" id="logoutBtn">退出</button>
+    </div>
+  </header>
+  <!-- 主布局 -->
+  <div class="main">
+    <aside class="sidebar">
+      <h2>栏目导航</h2>
+      <ul class="menu-list" id="menuList">
+        <li class="menu-item active" data-target="home">主页</li>
+        <li class="menu-item" data-target="column2">栏目二</li>
+        <li class="menu-item" data-target="column3">栏目三</li>
+        <li class="menu-item" data-target="column4">扩展栏目</li>
+        <li class="menu-item" data-target="about">关于我们</li>
+        <li class="menu-item" id="userManageMenu" data-target="userManage">用户管理</li>
+      </ul>
+    </aside>
+    <section class="content">
+      <div class="content-section active" id="home">
+        <h3>欢迎访问XGZ网</h3>
+        <div class="visit-count-container">
+          <p>您已访问本网站 <strong id="visitCount">0</strong> 次</p>
+        </div>
+        <div class="glass-module">
+          <button class="glass-btn float-hover" id="reShowRiskBtn">重新显示账户风险提示</button>
+        </div>
+        <p>这里是网站主页内容，可根据需求添加公告、最新动态等信息。</p>
+      </div>
+      <div class="content-section" id="column2"><h3>栏目二</h3><p>这里是栏目二的详细内容...</p></div>
+      <div class="content-section" id="column3"><h3>栏目三</h3><p>栏目三的内容示例...</p></div>
+      <div class="content-section" id="column4"><h3>扩展栏目</h3><p>扩展内容填充...</p></div>
+      <div class="content-section" id="about">
+        <h3>关于我们</h3>
+        <div class="about-item">
+          <h4>抖音账号</h4>
+          <p>@在河北的DJI Mini 4 Pro</p>
+          <a href="https://www.douyin.com/user/MS4wLjABAAAAhTBqOMMuuvf1VHouXMd1VJy7yMxHCe0niK9A-C5pjz8?from_tab_name=main" target="_blank">访问抖音个人主页</a>
+        </div>
+        <div class="about-item">
+          <h4>联系邮箱</h4>
+          <p>cuiminecraft@outlook.com</p>
+          <a href="mailto:cuiminecraft@outlook.com">发送邮件</a>
+        </div>
+      </div>
+      <div class="content-section" id="userManage">
+        <h3>用户管理</h3>
+        <p>以下是所有注册用户信息：</p>
+        <table class="user-table">
+          <!-- 修复：表格标签闭合错误 -->
+          <thead><tr><<th>用户名</</th><<th>绑定邮箱</</th></tr></thead>
+          <tbody id="userTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <!-- 登录模态框 -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">用户登录</div>
+        <span class="close-modal" data-modal="loginModal">&times;</span>
+      </div>
+      <form id="loginForm" onsubmit="return false">
+        <div class="form-group"><label>用户名</label><input type="text" id="loginUsername" required placeholder="请输入用户名"></div>
+        <div class="form-group"><label>密码</label><input type="password" id="loginPassword" required placeholder="请输入密码"></div>
+        <button type="button" class="form-btn float-hover" onclick="handleLogin(event)">登录</button>
+        <p class="form-message">还没账号？<span class="switch-modal" data-from="loginModal" data-to="registerModal">立即注册</span></p>
+      </form>
+    </div>
+  </div>
+  <!-- 注册模态框 -->
+  <div class="modal" id="registerModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">用户注册</div>
+        <span class="close-modal" data-modal="registerModal">&times;</span>
+      </div>
+      <form id="registerForm" onsubmit="return false">
+        <div class="form-group"><label>用户名</label><input type="text" id="regUsername" required placeholder="请设置用户名"></div>
+        <div class="form-group"><label>绑定邮箱</label><input type="email" id="regEmail" required placeholder="用于接收验证码"></div>
+        <div class="form-group captcha-row">
+          <input type="text" id="regCaptcha" required placeholder="6位验证码" style="flex:1;">
+          <button type="button" id="sendCaptcha" class="form-btn captcha-btn float-hover">发送验证码</button>
+        </div>
+        <div class="form-group"><label>密码</label><input type="password" id="regPassword" required placeholder="8-16位，含大小写和数字"></div>
+        <div class="form-group"><label>确认密码</label><input type="password" id="regConfirm" required placeholder="请确认密码"></div>
+        <button type="button" class="form-btn float-hover" onclick="handleRegister(event)">注册</button>
+        <p class="form-message">已有账号？<span class="switch-modal" data-from="registerModal" data-to="loginModal">立即登录</span></p>
+      </form>
+    </div>
+  </div>
+  <!-- 退出确认模态框 -->
+  <div class="modal" id="logoutConfirmModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">账户操作</div>
+        <span class="close-modal" data-modal="logoutConfirmModal">&times;</span>
+      </div>
+      <p>请选择操作：</p>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+        <button type="button" class="form-btn float-hover" id="confirmLogout">退出登录</button>
+        <button type="button" class="form-btn float-hover" style="background: #f44;" id="triggerDeleteAccount">注销账号</button>
+      </div>
+    </div>
+  </div>
+  <!-- 注销账号确认模态框 -->
+  <div class="modal" id="deleteAccountModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">确认注销账号</div>
+        <span class="close-modal" data-modal="deleteAccountModal">&times;</span>
+      </div>
+      <p style="color: #f44; font-weight: 500;">⚠️ 注销后账号数据将永久删除，且无法恢复！</p>
+      <p>确定要注销当前账号吗？</p>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button type="button" class="form-btn float-hover" id="cancelDeleteAccount">取消</button>
+        <button type="button" class="form-btn float-hover" style="background: #f44;" id="confirmDeleteAccount">确认注销</button>
+      </div>
+    </div>
+  </div>
+  <!-- 风险提示模态框 -->
+  <div class="modal" id="riskNoticeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">账户风险提示</div>
+        <span class="close-modal" data-modal="riskNoticeModal">&times;</span>
+      </div>
+      <div class="risk-notice">
+        <p>请您了解以下账户相关风险：</p>
+        <ul>
+          <li>本地存储的登录状态仅保存在当前浏览器，清除缓存后需重新登录。</li>
+          <li>请勿在公共设备上保存登录状态，避免账号信息泄露。</li>
+          <li>定期修改密码，保障账号安全。</li>
+        </ul>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="riskConfirm">
+        <label for="riskConfirm">我已阅读并了解上述风险</label>
+      </div>
+      <button type="button" class="form-btn float-hover" id="riskConfirmBtn" disabled>确认</button>
+    </div>
+  </div>
+  <!-- 错误提示模态框 -->
+  <div class="modal" id="errorModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">操作提示</div>
+        <span class="close-modal" data-modal="errorModal">&times;</span>
+      </div>
+      <p id="errorMsg">操作失败，请重试</p>
+      <button type="button" class="form-btn float-hover" style="margin-top: 20px;" onclick="document.getElementById('errorModal').classList.remove('active')">确定</button>
+    </div>
+  </div>
+  <!-- 成功提示模态框 -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">操作提示</div>
+        <span class="close-modal" data-modal="successModal">&times;</span>
+      </div>
+      <p id="successMsg">操作成功</p>
+      <button type="button" class="form-btn float-hover" style="margin-top: 20px;" onclick="document.getElementById('successModal').classList.remove('active')">确定</button>
+    </div>
+  </div>
+  <!-- 脚本部分 -->
+  <script>
+    // -------------------------- 1. 全局核心函数 --------------------------
+    function handleLogin(event) {
+      event.stopPropagation();
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+      
+      if (!username || !password) {
+        showError('用户名和密码不能为空');
+        return;
+      }
+      fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('currentUser', JSON.stringify({
+            username,
+            isAdmin: data.isAdmin
+          }));
+          updateUserManagePermission(data.isAdmin);
+          document.getElementById('displayName').textContent = username;
+          document.getElementById('levelInfo').textContent = data.isAdmin ? '身份：管理员' : '等级：Lv.1';
+          document.getElementById('levelInfo').style.display = 'block';
+          document.getElementById('headerLoginBtn').style.display = 'none';
+          document.getElementById('headerRegisterBtn').style.display = 'none';
+          document.getElementById('logoutBtn').style.display = 'block';
+          document.getElementById('loginModal').classList.remove('active');
+          showSuccess('登录成功');
+        } else {
+          showError(data.msg || '登录失败');
+        }
+      })
+      .catch(err => {
+        console.error('登录失败：', err);
+        showError('网络错误，请重试');
+      });
+    }
+
+    function handleRegister(event) {
+      event.stopPropagation();
+      const username = document.getElementById('regUsername').value;
+      const email = document.getElementById('regEmail').value;
+      const captcha = document.getElementById('regCaptcha').value;
+      const password = document.getElementById('regPassword').value;
+      const confirm = document.getElementById('regConfirm').value;
+      
+      if (!username || !email || !captcha || !password || !confirm) {
+        showError('请填写所有必填项');
+        return;
+      }
+      if (password !== confirm) {
+        showError('两次密码输入不一致');
+        return;
+      }
+      if (!/^[\w.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email)) {
+        showError('请输入有效的邮箱地址');
+        return;
+      }
+      fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, captcha, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showSuccess('注册成功，请登录');
+          document.getElementById('registerModal').classList.remove('active');
+          document.getElementById('loginModal').classList.add('active');
+        } else {
+          showError(data.msg || '注册失败');
+        }
+      })
+      .catch(err => {
+        console.error('注册失败：', err);
+        showError('网络错误，请重试');
+      });
+    }
+
+    function sendCaptcha(event) {
+      event.stopPropagation();
+      const email = document.getElementById('regEmail').value;
+      
+      if (!email || !/^[\w.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email)) {
+        showError('请输入有效的邮箱地址');
+        return;
+      }
+      fetch('/api/send-captcha', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showSuccess('验证码已发送至您的邮箱');
+        } else {
+          showError(data.msg || '验证码发送失败');
+        }
+      })
+      .catch(err => {
+        console.error('发送验证码失败：', err);
+        showError('网络错误，请重试');
+      });
+    }
+
+    function showError(msg) {
+      document.getElementById('errorMsg').textContent = msg;
+      document.getElementById('errorModal').classList.add('active');
+    }
+
+    function showSuccess(msg) {
+      document.getElementById('successMsg').textContent = msg;
+      document.getElementById('successModal').classList.add('active');
+      setTimeout(() => {
+        document.getElementById('successModal').classList.remove('active');
+      }, 3000);
+    }
+
+    function fetchUserList() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+      if (!currentUser.isAdmin) {
+        showError('无权限访问用户列表');
+        return;
+      }
+      fetch('/api/users')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const tbody = document.getElementById('userTableBody');
+          tbody.innerHTML = '';
+          data.users.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${user.username}</td><td>${user.email}</td>`;
+            tbody.appendChild(tr);
+          });
+        }
+      })
+      .catch(err => {
+        console.error('获取用户列表失败：', err);
+        showError('获取用户列表失败');
+      });
+    }
+
+    // -------------------------- 2. 权限控制函数 --------------------------
+    function updateUserManagePermission(isAdmin) {
+      const menu = document.getElementById('userManageMenu');
+      const section = document.getElementById('userManage');
+      
+      if (isAdmin) {
+        menu.style.display = 'block';
+      } else {
+        menu.style.display = 'none';
+        // 切换到主页
+        if (section.classList.contains('active')) {
+          document.querySelector('.menu-item[data-target="home"]').click();
+        }
+      }
+    }
+
+    // -------------------------- 3. 页面初始化 --------------------------
+    document.addEventListener('DOMContentLoaded', function() {
+      // 访问次数统计（优先执行）
+      function updateVisitCount() {
+        try {
+          let count = localStorage.getItem('visitCount') || 0;
+          count = parseInt(count) + 1;
+          localStorage.setItem('visitCount', count);
+          document.getElementById('visitCount').textContent = count;
+        } catch (err) {
+          document.getElementById('visitCount').textContent = '1';
+        }
+      }
+      updateVisitCount();
+
+      // 模态框通用关闭
+      document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const modalId = btn.getAttribute('data-modal');
+          document.getElementById(modalId).classList.remove('active');
+        });
+      });
+      window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+          e.target.classList.remove('active');
+        }
+      });
+
+      // 模态框切换
+      document.querySelectorAll('.switch-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById(btn.getAttribute('data-from')).classList.remove('active');
+          document.getElementById(btn.getAttribute('data-to')).classList.add('active');
+        });
+      });
+
+      // 顶部按钮事件
+      document.getElementById('headerLoginBtn').addEventListener('click', () => {
+        document.getElementById('loginModal').classList.add('active');
+      });
+      document.getElementById('headerRegisterBtn').addEventListener('click', () => {
+        document.getElementById('registerModal').classList.add('active');
+      });
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        document.getElementById('logoutConfirmModal').classList.add('active');
+      });
+
+      // 退出登录
+      document.getElementById('confirmLogout').addEventListener('click', () => {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        document.getElementById('displayName').textContent = '未登录';
+        document.getElementById('levelInfo').style.display = 'none';
+        document.getElementById('headerLoginBtn').style.display = 'block';
+        document.getElementById('headerRegisterBtn').style.display = 'block';
+        document.getElementById('logoutBtn').style.display = 'none';
+        updateUserManagePermission(false);
+        document.getElementById('logoutConfirmModal').classList.remove('active');
+        showSuccess('已退出登录');
+      });
+
+      // 注销账号
+      document.getElementById('triggerDeleteAccount').addEventListener('click', () => {
+        document.getElementById('logoutConfirmModal').classList.remove('active');
+        document.getElementById('deleteAccountModal').classList.add('active');
+      });
+      document.getElementById('cancelDeleteAccount').addEventListener('click', () => {
+        document.getElementById('deleteAccountModal').classList.remove('active');
+      });
+      document.getElementById('confirmDeleteAccount').addEventListener('click', async () => {
+        const user = JSON.parse(localStorage.getItem('currentUser')) || {};
+        if (!user.username) {
+          showError('请先登录');
+          return;
+        }
+        try {
+          const res = await fetch('/api/delete-account', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: user.username })
+          });
+          const data = await res.json();
+          if (data.success) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            document.getElementById('displayName').textContent = '未登录';
+            document.getElementById('levelInfo').style.display = 'none';
+            document.getElementById('headerLoginBtn').style.display = 'block';
+            document.getElementById('headerRegisterBtn').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'none';
+            updateUserManagePermission(false);
+            document.getElementById('deleteAccountModal').classList.remove('active');
+            showSuccess('账号已永久注销');
+          } else {
+            showError(data.msg || '注销失败');
+          }
+        } catch (err) {
+          console.error('注销失败：', err);
+          showError('网络错误，请重试');
+        }
+      });
+
+      // 菜单切换
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function() {
+          const target = this.getAttribute('data-target');
+          // 非管理员拦截用户管理
+          const user = JSON.parse(localStorage.getItem('currentUser')) || {};
+          if (target === 'userManage' && !user.isAdmin) {
+            showError('无权限访问');
+            return;
+          }
+          // 切换激活状态
+          document.querySelectorAll('.menu-item').forEach(menu => menu.classList.remove('active'));
+          document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+          this.classList.add('active');
+          document.getElementById(target).classList.add('active');
+          // 加载用户列表
+          if (target === 'userManage' && user.isAdmin) {
+            fetchUserList();
+          }
+        });
+      });
+
+      // 风险提示
+      const firstVisit = localStorage.getItem('firstVisit') === null;
+      const riskConfirmed = localStorage.getItem('riskConfirmed') === 'true';
+      if (firstVisit || !riskConfirmed) {
+        document.getElementById('riskNoticeModal').classList.add('active');
+      }
+      document.getElementById('riskConfirm').addEventListener('change', (e) => {
+        document.getElementById('riskConfirmBtn').disabled = !e.target.checked;
+      });
+      document.getElementById('riskConfirmBtn').addEventListener('click', () => {
+        localStorage.setItem('riskConfirmed', 'true');
+        localStorage.setItem('firstVisit', 'false');
+        document.getElementById('riskNoticeModal').classList.remove('active');
+      });
+      document.getElementById('reShowRiskBtn').addEventListener('click', () => {
+        document.getElementById('riskConfirm').checked = false;
+        document.getElementById('riskConfirmBtn').disabled = true;
+        document.getElementById('riskNoticeModal').classList.add('active');
+      });
+
+      // 初始化登录状态
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (isLoggedIn) {
+        const user = JSON.parse(localStorage.getItem('currentUser')) || {};
+        document.getElementById('displayName').textContent = user.username || '未登录';
+        document.getElementById('levelInfo').textContent = user.isAdmin ? '身份：管理员' : '等级：Lv.1';
+        document.getElementById('levelInfo').style.display = 'block';
+        document.getElementById('headerLoginBtn').style.display = 'none';
+        document.getElementById('headerRegisterBtn').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'block';
+        updateUserManagePermission(user.isAdmin);
+      } else {
+        updateUserManagePermission(false);
+      }
+
+      // 绑定发送验证码按钮
+      document.getElementById('sendCaptcha').addEventListener('click', sendCaptcha);
+    });
+  </script>
+</body>
+</html>
