@@ -20,7 +20,7 @@ XGZ网
  
 安全特性
  
-- 🔒 JWT签名身份认证，彻底解决前端响应篡改越权漏洞(即将使用)
+- 🔒 JWT签名身份认证，彻底解决前端响应篡改越权漏洞(正在制作 7~10天后会上传）
 - 🔒 bcryptjs不可逆密码加密存储，杜绝明文密码泄露风险
 - 🔒 接口层级权限校验，未登录/非管理员无法调用敏感接口
 - 🔒 越权操作防护，仅可操作当前登录账号的相关数据
@@ -179,7 +179,7 @@ Core functions
 - ✅ Access statistics: Local access count record, risk warning pop-up window
 - ✅ Email service: Automatic sending of registration verification codes, asynchronous sending without blocking interface response 
 Safety features 
-- 🔒 JWT signature-based identity authentication, completely solving the problem of front-end response tampering and unauthorized access (to be used soon)
+- 🔒 JWT signature-based identity authentication, completely solving the problem of front-end response tampering and unauthorized access(Being produced. It will be uploaded in 7 to 10 days.)
 - 🔒 bcryptjs irreversible password encryption storage, eliminating the risk of plaintext password leakage
 - 🔒 Interface-level permission verification, preventing unauthorized access to sensitive interfaces by unlogged-in users or non-administrators
 - 🔒 Protection against unauthorized operations, allowing only the manipulation of data related to the currently logged-in account
@@ -265,7 +265,7 @@ npm install
 3. Configure local environment variables
 - Create a .env file in the project root directory and fill in the environment variables exactly as they are in Vercel (refer to the environment variable table above)
 - Ensure that .env is added to the .gitignore file to prevent it from being committed to GitHub
-4. Start the local debugging service bash
+4. Start the local debugging service
 ```
 node server.js
 ```
