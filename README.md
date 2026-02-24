@@ -1,4 +1,7 @@
 # XGZnet
+🔥 零成本搭建带完整用户认证体系的轻量化个人网站，10分钟一键部署，无需服务器，自带安全防护，适配Cloudflare CDN加速
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=你的GitHub仓库完整地址)
+
 XGZ网
  🙌
 一个带完整用户认证体系的轻量化个人网站，前后端一体化设计，原生前端技术栈实现，适配Vercel Serverless无服务器部署，支持自定义域名+Cloudflare CDN加速，具备完善的用户管理、权限控制与安全防护能力。
