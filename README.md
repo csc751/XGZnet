@@ -198,7 +198,8 @@ Email Service Nodemailer, supporting general SMTP email
 Deployment Platform Vercel Serverless
 CDN Acceleration Adapted to Cloudflare's full CDN capabilities 
 Project directory structure 
-## Project Directory Structure ```text
+## Project Directory Structure 
+```text
 XGZ Web
 ├── public/                # Front-end static resources root directory
 │   ├── icons/             # Page icon resource folder
@@ -209,9 +210,9 @@ XGZ Web
 ├── package-lock.json      # Dependency version lock file
 ├── server.js              # Back-end service entry (full interface logic)
 ├── vercel.json            # Vercel deployment configuration file
-└── README.md              # Project description document ```
+└── README.md              # Project description document
+```
  
-
 One-click Deployment Guide 
 Preparatory Work 
 1. GitHub account (for code hosting)
@@ -254,7 +255,7 @@ Environmental Requirements
 Debugging steps 
 Clone/download the project code to the local machine. bash
 
-Run the following commands in your terminal:
+1.Run the following commands in your terminal:
 
 ```
 git clone your GitHub repository URL
