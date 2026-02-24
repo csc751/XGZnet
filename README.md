@@ -20,7 +20,7 @@ XGZ网
  
 安全特性
  
-//- 🔒 JWT签名身份认证，彻底解决前端响应篡改越权漏洞(即将使用)
+- 🔒 JWT签名身份认证，彻底解决前端响应篡改越权漏洞(即将使用)
 - 🔒 bcryptjs不可逆密码加密存储，杜绝明文密码泄露风险
 - 🔒 接口层级权限校验，未登录/非管理员无法调用敏感接口
 - 🔒 越权操作防护，仅可操作当前登录账号的相关数据
@@ -105,24 +105,21 @@ ADMIN_PASSWORD 管理员登录密码 你的管理员密码
 调试步骤
  
 1. 克隆/下载项目代码到本地
-bash
-  
+```
 git clone 你的GitHub仓库地址
 cd 项目文件夹
- 
+```
 2. 安装项目依赖
-bash
-  
+```
 npm install
- 
+```
 3. 配置本地环境变量
 - 在项目根目录创建 .env 文件，填入和Vercel完全一致的环境变量（参考上方环境变量表格）
 - 确保 .gitignore 文件中已添加 .env ，禁止将该文件提交到GitHub
 4. 启动本地调试服务
-bash
-  
+```
 node server.js
- 
+```
 5. 访问网站
 - 服务启动成功后，浏览器打开  http://localhost:3000  即可访问本地调试版本
 - 所有功能与线上部署版本完全一致，可直接进行接口测试、功能调试
@@ -261,17 +258,17 @@ Clone/download the project code to the local machine. bash
 git clone your GitHub repository URL
 cd project folder
 ```  
-2. Install project dependencies bash
-
+2. Install project dependencies
+```
 npm install
- 
+```
 3. Configure local environment variables
 - Create a .env file in the project root directory and fill in the environment variables exactly as they are in Vercel (refer to the environment variable table above)
 - Ensure that .env is added to the .gitignore file to prevent it from being committed to GitHub
 4. Start the local debugging service bash
-
+```
 node server.js
- 
+```
 5. Accessing the Website
 - After the service starts successfully, you can access the local debugging version by opening http://localhost:3000 in your browser.
 - All functions are exactly the same as those in the online deployment version, allowing you to directly conduct interface testing and functional debugging. 
