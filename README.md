@@ -1,4 +1,4 @@
-# XGZnet
+# XGZnet(中文 Chinese)
 🔥 零成本搭建带完整用户认证体系的轻量化个人网站，10分钟一键部署，无需服务器，自带安全防护，适配Cloudflare CDN加速
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/csc751/XGZnet.git)
 
@@ -164,3 +164,139 @@ node server.js
  
 - 抖音账号：@在河北的DJI Mini 4 Pro大
 - 联系邮箱：cuiminecraft@outlook.com
+#XGZnet(英文 English)
+# XGZnet
+Build a lightweight personal website with a complete user authentication system at zero cost. One-click deployment in 10 minutes, no server required, comes with built-in security protection, and is compatible with Cloudflare CDN acceleration. [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/csc751/XGZnet.git)
+
+
+XGZ Web
+🙌
+A lightweight personal website with a complete user authentication system, featuring an integrated front-end and back-end design, implemented with native front-end technology stacks, compatible with Vercel Serverless deployment, supporting custom domain names and Cloudflare CDN acceleration, and equipped with comprehensive user management, permission control, and security protection capabilities. 
+Functional Features 🚀 
+Core functions 
+- ✅ User registration: Email verification code check, password strength compliance check
+- ✅ User login: JWT stateless identity authentication, tamper-proof login status
+- ✅ Permission management: Administrator-exclusive user management module, isolation of ordinary user permissions
+- ✅ Account management: Support for secure logout, permanent account cancellation function
+- ✅ Front-end page: Responsive layout, compatible with PC and mobile devices, multi-column content display
+- ✅ Access statistics: Local access count record, risk warning pop-up window
+- ✅ Email service: Automatic sending of registration verification codes, asynchronous sending without blocking interface response 
+Safety features 
+- 🔒 JWT signature-based identity authentication, completely solving the problem of front-end response tampering and unauthorized access (to be used soon)
+- 🔒 bcryptjs irreversible password encryption storage, eliminating the risk of plaintext password leakage
+- 🔒 Interface-level permission verification, preventing unauthorized access to sensitive interfaces by unlogged-in users or non-administrators
+- 🔒 Protection against unauthorized operations, allowing only the manipulation of data related to the currently logged-in account
+- 🔒 Expiration limit on email verification codes, preventing repeated use
+- 🔒 Back-end verification of front-end login status, preventing tampering and forging of permissions through local storage modification 
+Technology stack 
+Module Technology Selection
+Front-end Native HTML + CSS + JavaScript, no framework dependency
+Back-end Node.js + Express 5.x
+Data Storage Redis key-value database
+Identity Authentication JSON Web Token (JWT)
+Email Service Nodemailer, supporting general SMTP email
+Deployment Platform Vercel Serverless
+CDN Acceleration Adapted to Cloudflare's full CDN capabilities 
+Project directory structure 
+## Project Directory Structure ```text
+XGZ Web
+├── public/                # Front-end static resources root directory
+│   ├── icons/             # Page icon resource folder
+│   ├── favicon.ico        # Website icon
+│   └── index.html         # Website home page entry (complete front-end page + logic)
+├── .gitignore             # Git ignore file configuration
+├── package.json           # Project dependency configuration
+├── package-lock.json      # Dependency version lock file
+├── server.js              # Back-end service entry (full interface logic)
+├── vercel.json            # Vercel deployment configuration file
+└── README.md              # Project description document ```
+ 
+
+One-click Deployment Guide 
+Preparatory Work 
+1. GitHub account (for code hosting)
+2. Vercel account (linked to the GitHub account)
+3. Available Redis database (Upstash free Redis is recommended, compatible with Vercel)
+4. Email account supporting SMTP (for sending registration verification codes) 
+Deployment steps 
+1. Code Hosting on GitHub
+- Upload the complete project code to the GitHub repository. ⚠️ Do not upload the .env file!!!
+- Ensure that the root directory of the repository contains server.js, package.json, vercel.json, and the public folder.
+2. Importing the Project to Vercel
+- Log in to the Vercel console, click on "New Project", and import the GitHub repository you just created.
+- No need to modify the build configuration; Vercel will automatically recognize the project configuration.
+3. Configuring Environment Variables
+In the "Settings → Environment Variables" of the Vercel project, add the following required environment variables:
+Variable Name | Variable Description | Example Value
+--- | --- | ---
+REDIS_USERNAME | Redis database username | default
+REDIS_PASSWORD | Redis database password | Your Redis password
+REDIS_HOST | Redis connection address | xxx-xxx.redis.com
+REDIS_PORT | Redis port number | 6379
+EMAIL_HOST | Email SMTP server address | smtp.qq.com
+EMAIL_PORT | Email SMTP port | 465
+EMAIL_USER | Sender's email address | xxx@qq.com
+EMAIL_PASS | Email SMTP authorization code (not the login password) | Your email authorization code
+ADMIN_USERNAME | Administrator login account | admin
+ADMIN_PASSWORD | Administrator login password | Your administrator password
+//JWT_SECRET | JWT signature key (a random complex string of 32 characters or more) | xxxxxxxx
+4. Executing Deployment
+- Click on "Deploy" and wait for Vercel to automatically complete the build and deployment.
+- After a successful deployment, Vercel will automatically generate a default domain in the format of xxx.vercel.app, and you can access the website.
+5. Custom Domain + Cloudflare Configuration (Optional)
+- In the "Settings → Domains" of the Vercel project, add your custom domain.
+- Follow the Vercel instructions to modify the DNS resolution records of the domain in Cloudflare.
+- It is recommended to set the SSL/TLS mode of Cloudflare to "Full" to ensure normal HTTPS access. 
+Local Debugging Guide 
+Environmental Requirements 
+- Node.js 18.x and above versions
+- npm package manager 
+Debugging steps 
+Clone/download the project code to the local machine. bash
+
+Run the following commands in your terminal:
+
+```
+git clone your GitHub repository URL
+cd project folder
+```  
+2. Install project dependencies bash
+
+npm install
+ 
+3. Configure local environment variables
+- Create a .env file in the project root directory and fill in the environment variables exactly as they are in Vercel (refer to the environment variable table above)
+- Ensure that .env is added to the .gitignore file to prevent it from being committed to GitHub
+4. Start the local debugging service bash
+
+node server.js
+ 
+5. Accessing the Website
+- After the service starts successfully, you can access the local debugging version by opening http://localhost:3000 in your browser.
+- All functions are exactly the same as those in the online deployment version, allowing you to directly conduct interface testing and functional debugging. 
+Q&A
+
+Did you not receive the registration verification code after deployment? 
+- Check if the SMTP configuration of the email is correct and confirm that the email has enabled the SMTP service.
+- Verify if the email authorization code is correct. Some email providers require generating a separate SMTP authorization code.
+- Check the spam or promotional email folder of the email account, as the verification code email might have been intercepted.
+- Review the function logs of the Vercel project to confirm if there are any errors in sending the email. 
+2. The login interface reports an error, indicating that the service is initializing? 
+- Check if the Redis environment variable configuration is correct and confirm that the Redis service is running normally.
+- Confirm that the IP whitelist of the Redis database has been opened to Vercel's outbound IP or set to allow all IP addresses to access.
+- Check the Vercel function logs to confirm whether the Redis connection is normal. 
+3. Existing registered users cannot log in? 
+After the security upgrade, passwords are encrypted and stored using bcryptjs. The previously plaintext-stored passwords cannot be directly verified.
+Solution: Users need to re-register their accounts or manually encrypt their original passwords and update them in Redis. 
+4. Can one still perform unauthorized access by modifying the response through packet capture? 
+- No. All sensitive interfaces have added backend JWT token verification. Only modifying the front-end response cannot generate a valid signature token.
+- When the page loads, it will automatically verify the validity of the login status with the backend. Tampering with local storage will automatically clear the login status. 
+Safety Precautions 
+1. The JWT_SECRET key must use a complex random string. Simple characters are prohibited. It must not be disclosed to others.
+2. For the administrator account password, do not use weak passwords. It is recommended to use a complex combination of letters, numbers, and symbols.
+3. The local debugging .env file must never be submitted to a public GitHub repository to prevent the leakage of sensitive information.
+4. It is recommended to change the Redis password, email authorization code, and JWT key regularly to enhance security.
+5. In the production environment, do not disable interface permission verification to avoid unauthorized access vulnerabilities. 
+Contact Information 
+- Douyin account: @在河北的DJI Mini 4 Pro大
+- Contact email: cuiminecraft@outlook.com
