@@ -37,8 +37,8 @@ CDN加速 适配Cloudflare全量CDN能力
  
 项目目录结构
  
-plaintext
-  
+## 项目目录结构
+```text
 XGZ网
 ├── public/                # 前端静态资源根目录
 │   ├── icons/             # 页面图标资源文件夹
@@ -50,6 +50,7 @@ XGZ网
 ├── server.js              # 后端服务入口（全量接口逻辑）
 ├── vercel.json            # Vercel部署配置文件
 └── README.md              # 项目说明文档
+```
  
  
 一键部署指南
