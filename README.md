@@ -86,31 +86,24 @@ Vercel 账号（绑定 GitHub 账号）
 无需修改构建配置，Vercel 会自动识别项目配置
 3. 配置环境变量
 在 Vercel 项目的「Settings → Environment Variables」中，添加以下必填环境变量：
-```
-变量名	         变量说明	                    示例值
 
-REDIS_USERNAME	Redis 数据库用户名	           default
+---
+| 变量名 | 变量说明	| 示例值 |
+|------|----------|
+| REDIS_USERNAME | Redis 数据库用户名 | default |
+| REDIS_PASSWORD | Redis 数据库密码 | 你的 Redis 密码 |
+| REDIS_HOST | Redis 连接地址 | xxx-xxx.redis.com |
+| REDIS_PORT | Redis 端口号 | 6379 |
+| EMAIL_HOST | 邮箱 SMTP 服务器地址	| smtp.qq.com |
+| EMAIL_PORT | 邮箱 SMTP 端口 | 465 |
+| EMAIL_USER | 发件人邮箱完整地址 | xxx@qq.com |
+| EMAIL_PASS | 邮箱 SMTP 授权码（邮箱授权码）| 你的邮箱授权码 |
+| ADMIN_USERNAME | 管理员登录账号 | admin |
+| ADMIN_PASSWORD | 管理员登录密码 | 你的管理员密码 |
+| JWT_SECRET | JWT 签名密钥（32 位以上随机复杂字符串 | xxxxxxxx |
 
-REDIS_PASSWORD	Redis 数据库密码	          你的 Redis 密码
+---
 
-REDIS_HOST	    Redis 连接地址	              xxx-xxx.redis.com
-
-REDIS_PORT	    Redis 端口号	              6379
-
-EMAIL_HOST	    邮箱 SMTP 服务器地址	       smtp.qq.com
-
-EMAIL_PORT	    邮箱 SMTP 端口	               465
-
-EMAIL_USER	    发件人邮箱完整地址	            xxx@qq.com
-
-EMAIL_PASS	    邮箱 SMTP 授权码（邮箱授权码）	你的邮箱授权码
-
-ADMIN_USERNAME	管理员登录账号	admin
-
-ADMIN_PASSWORD	管理员登录密码	你的管理员密码
-
-JWT_SECRET	    JWT 签名密钥（32 位以上随机复杂字符串）	xxxxxxxx
-```
 4. 执行部署
 点击「Deploy」，等待 Vercel 自动完成构建与部署
 部署成功后，Vercel 会自动生成 xxx.vercel.app 格式的默认域名，即可访问网站
