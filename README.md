@@ -169,7 +169,7 @@ JWT_SECRET 密钥必须使用复杂随机字符串，禁止使用简单字符，
 联系邮箱：cuiminecraft@outlook.com
 🔝 返回顶部 | 🌐 Switch to English
 
-XGZnet
+# XGZnet(英文 English)
 🔥 Build a lightweight personal website with a complete user authentication system at zero cost. One-click deployment in 10 minutes, no server required, comes with built-in security protection, and is compatible with Cloudflare CDN acceleration.
 
 Deploy with Vercel
@@ -232,7 +232,7 @@ Import the GitHub repository you just created
 No need to modify the build configuration; Vercel will automatically recognize the project configuration
 3. Configuring Environment Variables
 In the "Settings → Environment Variables" of the Vercel project, add the following required environment variables:
-
+```
 Variable Name	Description	Example Value
 REDIS_USERNAME	Redis database username	default
 REDIS_PASSWORD	Redis database password	Your Redis password
@@ -245,6 +245,7 @@ EMAIL_PASS	Email SMTP authorization code (not login password)	Your email authori
 ADMIN_USERNAME	Administrator login account	admin
 ADMIN_PASSWORD	Administrator login password	Your administrator password
 JWT_SECRET	JWT signature key (32+ character random complex string)	xxxxxxxx
+```
 4. Executing Deployment
 Click on "Deploy" and wait for Vercel to automatically complete the build and deployment
 After successful deployment, Vercel will generate a default domain in the format xxx.vercel.app
@@ -258,19 +259,22 @@ Node.js 18.x and above versions
 npm package manager
 Debugging Steps
 1. Clone/Download Project Code
-bash
+```
 git clone https://github.com/csc751/XGZnet.git
-cd project-folder
+cd XGZnet-main
+```
 2. Install Project Dependencies
-bash
+```
 npm install
+```
 3. Configure Local Environment Variables
 Create a .env file in the project root directory
 Fill in the environment variables exactly as they are in Vercel (refer to the environment variable table above)
 Ensure that .env is added to the .gitignore file to prevent it from being committed to GitHub
 4. Start the Local Debugging Service
-bash
+```
 node server.js
+```
 5. Accessing the Website
 After the service starts successfully, open http://localhost:3000 in your browser
 All functions are exactly the same as the online deployment version
