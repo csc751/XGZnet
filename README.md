@@ -203,7 +203,7 @@ Email Service	Nodemailer, supporting general SMTP email
 Deployment Platform	Vercel Serverless
 CDN Acceleration	Adapted to Cloudflare's full CDN capabilities
 📁 Project Directory Structure
-text
+```
 XGZ Web
 ├── public/                # Front-end static resources root directory
 │   ├── icons/             # Page icon resource folder
@@ -215,6 +215,7 @@ XGZ Web
 ├── server.js              # Back-end service entry (full interface logic)
 ├── vercel.json            # Vercel deployment configuration file
 └── README.md              # Project description document
+```
 🚀 One-click Deployment Guide
 Preparatory Work
 GitHub Account (for code hosting)
