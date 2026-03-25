@@ -88,6 +88,8 @@ Vercel 账号（绑定 GitHub 账号）
 在 Vercel 项目的「Settings → Environment Variables」中，添加以下必填环境变量：
 
 ---
+
+## ENV配置
 | 变量名 | 变量说明	| 示例值 |
 |------|----------|
 | REDIS_USERNAME | Redis 数据库用户名 | default |
@@ -196,7 +198,7 @@ XGZ Web is a lightweight personal website with a complete user authentication sy
 ---
 
 ## Technology Stackw
-| Module |	Technology Selection |
+| Module | Technology Selection |
 |------|----------|
 | Front-end | Native HTML + CSS + JavaScript, no framework dependency |
 | Back-end | Node.js + Express 5.x |
